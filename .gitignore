@@ -90,3 +90,4 @@ typings/
 
 # Docker Generated Files
 qrl-members-database
+.idea/
