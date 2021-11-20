@@ -9,11 +9,10 @@ async function createClient(): Promise<Auth0Client> {
     });
 }
 
-async function loginWithPopup(client, options) {
+async function loginWithPopup(client: Auth0Client, options) {
     popupOpen.set(true);
     try {
         await client.loginWithPopup(options);
-
         user.set(await client.getUser());
         isAuthenticated.set(true);
     } catch (e) {
