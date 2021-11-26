@@ -1,0 +1,4 @@
+database:
+  address: localhost
+  port: 8529
+  username: root
