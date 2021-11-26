@@ -1,6 +1,6 @@
 import createAuth0Client, { Auth0Client } from '@auth0/auth0-spa-js';
 import { isAuthenticated, popupOpen, user } from './store';
-import config from './auth_config';
+import config from './authConfig';
 
 async function createClient(): Promise<Auth0Client> {
     return await createAuth0Client({
