@@ -1,34 +1,31 @@
 <script lang='ts'>
 
-    import auth from '$lib/authService';
+    import {createClient, loginWithPopup, logout} from '$lib/authService';
     import { onMount } from 'svelte';
-    import { isAuthenticated, isLoading, user } from '$lib/store';
-    import { Auth0Client } from '@auth0/auth0-spa-js';
-    import { goto } from "$app/navigation"
+    import { isAuthenticated, auth0Ready } from '$lib/store';
+    import { goto } from "$app/navigation";
+import { get } from 'svelte/store';
 
-    let auth0Client: Auth0Client;
-
-    onMount(async () => {
-        auth0Client = await auth.createClient();
-        isAuthenticated.set(await auth0Client.isAuthenticated());
-        user.set(await auth0Client.getUser());
-        isLoading.set(false);
-    });
 
     function login() {
-        auth.loginWithPopup(auth0Client, {});
+        loginWithPopup({});
     }
 
     function logout() {
-        auth.logout(auth0Client);
+        logout();
     }
 
-    if ($isAuthenticated) {
-        goto("/app");
-    }
+    onMount(() => {
+        isAuthenticated.subscribe((auth) => {
+            if (get(auth0Ready) && auth) {
+                goto("/app");
+            }
+            console.log(auth,get(auth0Ready))
+        });
+    });
 
 </script>
-{#if $isLoading}
+{#if $auth0Ready}
     <h1>Gimme a sec im loading</h1>
 {:else}
 
