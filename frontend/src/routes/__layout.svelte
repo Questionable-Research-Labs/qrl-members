@@ -1,16 +1,14 @@
 <script lang="ts">
-    import {page} from "$app/stores";
-import { createClient } from "$lib/authService";
-    import Header from "$lib/components/Header.svelte";
-import { onMount } from "svelte";
+    import { page } from "$app/stores";
+    import { createClient } from "$lib/authService";
+    import { onMount } from "svelte";
+
+    import { Styles } from 'sveltestrap';
 
     onMount(async () => {
-        createClient()
-
+        createClient();
     });
 </script>
+<Styles />
 
-{#if $page.path !== "/"}
-    <Header />
-{/if}
-<slot/>
+<slot />
