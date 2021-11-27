@@ -11,10 +11,6 @@ import { get } from 'svelte/store';
         loginWithPopup({});
     }
 
-    function logout() {
-        logout();
-    }
-
     onMount(() => {
         isAuthenticated.subscribe((auth) => {
             if (get(auth0Ready) && auth) {

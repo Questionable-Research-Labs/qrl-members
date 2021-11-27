@@ -26,7 +26,7 @@ export async function loginWithPopup(options) {
     }
 }
 
-export function logout() {
+export async function logout() {
     let client = get(auth0Client)
-    return client.logout();
+    await client.logout();
 }
