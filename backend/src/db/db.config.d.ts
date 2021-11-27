@@ -3,5 +3,4 @@ export interface DbConfig {
     password?: string;
     port: string;
     address: string;
-  }
-  
+}

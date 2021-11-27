@@ -5,8 +5,8 @@ import { ConnectionService } from './connection.service';
 import { DatabaseService } from './database.service';
 
 @Module({
-  imports: [ConfigModule, ControlModule],
-  exports: [DatabaseService],
-  providers: [ConnectionService, DatabaseService],
+    imports: [ConfigModule, ControlModule],
+    exports: [DatabaseService],
+    providers: [ConnectionService, DatabaseService],
 })
 export class DbModule {}

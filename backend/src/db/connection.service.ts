@@ -7,45 +7,45 @@ import { ShutdownService } from 'src/control/shutdown.service';
 
 @Injectable()
 export class ConnectionService implements OnModuleInit, OnModuleDestroy {
-  public db: Database;
+    public db: Database;
 
-  constructor(
-    private configService: ConfigService,
-    private shutdownService: ShutdownService,
-  ) {}
+    constructor(
+        private configService: ConfigService,
+        private shutdownService: ShutdownService,
+    ) {}
 
-  async onModuleInit(): Promise<void> {
-    const { port, username, password, address } =
-      this.configService.get<DbConfig>('database');
+    async onModuleInit(): Promise<void> {
+        const { port, username, password, address } =
+            this.configService.get<DbConfig>('database');
 
-    const connectionURL = 'http://' + address + ':' + port;
-    Logger.log('Connecting to: ' + connectionURL, 'DB');
+        const connectionURL = 'http://' + address + ':' + port;
+        Logger.log('Connecting to: ' + connectionURL, 'DB');
 
-    try {
-      this.db = new Database({
-        url: connectionURL,
-        databaseName: '_system',
-        auth: {
-          username,
-          password,
-        },
-      });
-    } catch (ex) {
-      Logger.error('Error logging into database', ex);
+        try {
+            this.db = new Database({
+                url: connectionURL,
+                databaseName: '_system',
+                auth: {
+                    username,
+                    password,
+                },
+            });
+        } catch (ex) {
+            Logger.error('Error logging into database', ex);
+        }
+
+        try {
+            const people_graph = await this.db.collection('people');
+            if (!(await people_graph.exists())) {
+                await this.db.createCollection('people');
+            }
+        } catch (ex) {
+            Logger.error(ex);
+            this.shutdownService.shutdown();
+        }
     }
 
-    try {
-      const people_graph = await this.db.collection('people');
-      if (!(await people_graph.exists())) {
-        await this.db.createCollection('people');
-      }
-    } catch (ex) {
-      Logger.error(ex);
-      this.shutdownService.shutdown();
+    onModuleDestroy() {
+        this.db.close();
     }
-  }
-
-  onModuleDestroy() {
-    this.db.close();
-  }
 }

@@ -1,0 +1,28 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Member {
+  id: Int!
+  signUpDate: DayJS!
+  firstName: String!
+  lastName: String!
+  preferredName: String!
+  covidVaccine: Boolean!
+  patron: Boolean!
+  youth: Boolean!
+  parent: Boolean!
+  dateOfBirth: DayJS!
+  email: String!
+  sms: Int
+  children: [Member!]
+  dietaryRequirements: [String!]
+  medicalIssues: [String!]
+}
+
+"""A DayJS Date"""
+scalar DayJS
+
+type Query {
+  hello: String!
+}
