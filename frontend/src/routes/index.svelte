@@ -4,7 +4,8 @@
     import { onMount } from 'svelte';
     import { isAuthenticated, auth0Ready } from '$lib/store';
     import { goto } from "$app/navigation";
-import { get } from 'svelte/store';
+    import { get } from 'svelte/store';
+    import {Button} from "sveltestrap";
 
 
     function login() {
@@ -19,15 +20,15 @@ import { get } from 'svelte/store';
             console.log(auth,get(auth0Ready))
         });
     });
-
 </script>
-{#if $auth0Ready}
+
+{#if !$auth0Ready}
     <h1>Gimme a sec im loading</h1>
 {:else}
 
     {#if !$isAuthenticated}
         <h1>damn not authed what a pleb</h1>
-        <button on:click='{login}'>Log In</button>
+        <Button color="primary" on:click='{login}'>Log In</Button>
     {/if}
 
 {/if}
