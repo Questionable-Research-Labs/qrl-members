@@ -1,8 +1,0 @@
-database:
-  address: localhost
-  port: 8529
-  username: root
-
-auth0:
-  audience: https://api.questionable.org.nz
-  issuer: https://qrl-dev.au.auth0.com/
