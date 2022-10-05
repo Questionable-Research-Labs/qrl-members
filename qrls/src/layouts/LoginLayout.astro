@@ -1,0 +1,34 @@
+---
+import Button from "../components/Button.astro";
+
+type Props = {
+  "q-name": string;
+};
+
+const { "q-name": qName } = Astro.props;
+---
+
+<div q-name={qName} class="wrapper">
+  <Button q-name="main" color="red" class="back-button">Go back</Button>
+
+  <div class="content">
+    <slot />
+  </div>
+</div>
+
+<style lang="scss">
+  .back-button {
+    padding: 1rem;
+  }
+
+  .wrapper {
+    padding-top: 1rem;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 2rem;
+
+    &.shown {
+      display: flex;
+    }
+  }
+</style>

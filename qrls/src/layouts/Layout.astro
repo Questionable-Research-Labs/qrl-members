@@ -1,0 +1,65 @@
+---
+export interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <slot />
+    <style is:global lang="scss">
+      :root {
+        --bg-color: #323843;
+        --bg-color-dark: #272c34;
+        --bg-color-red: #de3f44;
+
+        --text-color: #fff;
+        --text-color-dark: #cacaca;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+      }
+
+      html {
+        font-family: system-ui, sans-serif;
+        background-color: #f6f6f6;
+        background-color: var(--bg-color);
+        color: var(--text-color);
+      }
+
+      body {
+        padding: 5rem;
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        gap: 2rem;
+        justify-content: center;
+        align-items: center;
+      }
+
+      div[q-name] {
+        display: none;
+      }
+    </style>
+
+    <script>
+      import { startApp } from "../assets/app";
+
+      if (document) {
+        document.addEventListener("DOMContentLoaded", startApp);
+      }
+    </script>
+  </body>
+</html>

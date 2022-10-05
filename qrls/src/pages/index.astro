@@ -1,0 +1,55 @@
+---
+import Button from "../components/Button.astro";
+import Guest from "../components/Guest.astro";
+import Member from "../components/Member.astro";
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="QRLS Signin">
+  <img src="/logo-text.svg" alt="QRL Logo" q-logo />
+  <h1>Welcome to QRL</h1>
+
+  <div class="container" q-slide>
+    <div q-name="main">
+      <h2>Are you a</h2>
+
+      <div class="options">
+        <Button q-name="member" size="large" color="normal">
+          Member
+          <Fragment slot="optional-text">I've signed up</Fragment>
+        </Button>
+        <div></div>
+        <Button q-name="guest" size="large" color="normal">
+          Guest
+          <Fragment slot="optional-text">I haven't signed up</Fragment>
+        </Button>
+      </div>
+    </div>
+
+    <Guest />
+    <Member />
+  </div>
+</Layout>
+
+<style lang="scss">
+  img[q-logo] {
+    transition: all 0.1s ease-in-out;
+    height: 200px;
+
+    &.large {
+      height: 300px;
+    }
+  }
+
+  [q-name="main"].shown {
+    display: block;
+  }
+
+  .options {
+    display: grid;
+    padding: 5rem 0;
+    height: 30rem;
+    width: 70rem;
+    grid-template-columns: 45% 10% 45%;
+  }
+</style>
