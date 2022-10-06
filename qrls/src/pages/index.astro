@@ -6,7 +6,7 @@ import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout title="QRLS Signin">
-  <img src="/logo-text.svg" alt="QRL Logo" q-logo />
+  <img src="/logo-text.svg" alt="QRL Logo" q-logo height="200" />
   <h1>Welcome to QRL</h1>
 
   <div class="container" q-slide>
@@ -35,14 +35,12 @@ import Layout from "../layouts/Layout.astro";
   img[q-logo] {
     transition: all 0.1s ease-in-out;
     height: 200px;
-
-    &.large {
-      height: 300px;
-    }
   }
 
-  [q-name="main"].shown {
-    display: block;
+  [q-name="main"] {
+    &.shown {
+      display: block;
+    }
   }
 
   .options {

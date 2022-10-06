@@ -1,6 +1,7 @@
 ---
 type Props = {
-  "q-name": string;
+  "q-name"?: string;
+  "q-submit"?: string;
   size?: "small" | "large";
   color?: "normal" | "light" | "red";
   class?: string;
@@ -8,13 +9,18 @@ type Props = {
 
 const {
   "q-name": qName,
+  "q-submit": qSubmit,
   size = "small",
   color = "normal",
   class: className = "",
 } = Astro.props;
 ---
 
-<button q-name={qName} class={`${size} ${color} ${className}`}>
+<button
+  q-name={qName}
+  class={`${size} ${color} ${className}`}
+  q-submit={qSubmit}
+>
   <slot />
   <span class="optional-text"><slot name="optional-text" /></span>
 </button>

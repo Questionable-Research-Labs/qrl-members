@@ -1,7 +1,43 @@
 ---
 import LoginLayout from "../layouts/LoginLayout.astro";
+import Button from "./Button.astro";
 ---
 
 <LoginLayout q-name="guest">
-  <h1>Im a guest</h1>
+  <form class="guest-form" q-submit="guest">
+    <h2>Please enter you full name</h2>
+
+    <input q-guest-name type="text" />
+    <Button color="light" q-submit="guest" class="submit">Submit</Button>
+  </form>
 </LoginLayout>
+
+<style lang="scss">
+  .guest-form {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    align-items: center;
+    justify-content: center;
+
+    input {
+      font-size: 20pt;
+      padding: 1rem;
+      width: 90%;
+      background-color: var(--bg-color);
+      outline: 5px solid rgb(0 0 0 / 5%);
+      border: none;
+      color: var(--text-color);
+      text-align: center;
+
+      &:focus-visible {
+        outline: 7px solid rgb(0 0 0 / 15%);
+      }
+    }
+
+    :global(.submit) {
+      height: 10rem;
+      width: 20rem;
+    }
+  }
+</style>
