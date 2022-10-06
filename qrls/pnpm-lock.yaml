@@ -4,6 +4,7 @@ specifiers:
   '@astrojs/svelte': ^1.0.1
   '@supabase/supabase-js': ^1.35.7
   astro: ^1.4.4
+  fuse.js: ^6.6.2
   sass: ^1.55.0
   svelte: ^3.46.4
   svelte-language-server: ^0.14.36
@@ -12,6 +13,7 @@ dependencies:
   '@astrojs/svelte': 1.0.1_sass@1.55.0+svelte@3.50.1
   '@supabase/supabase-js': 1.35.7
   astro: 1.4.4_sass@1.55.0
+  fuse.js: 6.6.2
   sass: 1.55.0
   svelte: 3.50.1
 
@@ -1831,6 +1833,11 @@ packages:
 
   /function-bind/1.1.1:
     resolution: {integrity: sha512-yIovAzMX49sF8Yl58fSCWJ5svSLuaibPxXQJFLmBObTuCr0Mf1KiPopGM9NiFjiYBCbfaa2Fh6breQ6ANVTI0A==}
+    dev: false
+
+  /fuse.js/6.6.2:
+    resolution: {integrity: sha512-cJaJkxCCxC8qIIcPBF9yGxY0W/tVZS3uEISDxhYIdtk8OL93pe+6Zj7LjCqVV4dzbqcriOZ+kQ/NE4RXZHsIGA==}
+    engines: {node: '>=10'}
     dev: false
 
   /gensync/1.0.0-beta.2:

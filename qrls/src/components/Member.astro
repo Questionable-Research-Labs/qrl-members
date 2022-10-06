@@ -4,6 +4,18 @@ import MemberList from "./MemberList.svelte";
 ---
 
 <LoginLayout q-name="member">
-  <h1>I'm a member</h1>
-  <MemberList />
+  <div>
+    <h2>Enter your name and click on it when it appares</h2>
+    <MemberList client:only />
+  </div>
 </LoginLayout>
+
+<style>
+  div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+  }
+</style>

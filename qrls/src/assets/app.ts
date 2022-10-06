@@ -15,7 +15,7 @@ export class QNotification extends Event {
   }
 }
 
-class QChangeEvent extends Event {
+export class QChangeEvent extends Event {
   public name: string;
 
   constructor(name: string) {
@@ -62,16 +62,18 @@ const qGuestSubmit = (guestName: HTMLInputElement) => async (event: Event) => {
     }
 
     document.dispatchEvent(
-      new QNotification(`Successfully remove sign in for ${name}`)
+      new QNotification(`Successfully remove sign in for ${name}!`)
     );
   };
 
   document.dispatchEvent(
-    new QNotification(`Sign in as guest ${name}`, {
+    new QNotification(`${name} has signed in as a guest!`, {
       action: undoAction,
       text: "Undo",
     })
   );
+
+  document.dispatchEvent(new QChangeEvent("main"));
 };
 
 export const startApp = () => {
@@ -108,5 +110,5 @@ export const startApp = () => {
   guestSubmitButton.addEventListener("click", qGuestSubmit(guestName));
   guestSubmitForm.addEventListener("submit", qGuestSubmit(guestName));
 
-  document.dispatchEvent(new QChangeEvent("guest"));
+  document.dispatchEvent(new QChangeEvent("member"));
 };

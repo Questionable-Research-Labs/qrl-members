@@ -18,7 +18,7 @@
 
     timeout = setTimeout(() => {
       notificationPresent = false;
-    }, 30_000);
+    }, 5000);
   });
 </script>
 
