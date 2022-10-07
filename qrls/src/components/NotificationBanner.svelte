@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { QNotification, QNotificationAction } from "../assets/app";
+  import { addEventListener, QNotificationAction } from "../assets/event";
 
   let notificationPresent = false;
   let timeout: ReturnType<typeof setTimeout> | undefined;
@@ -7,9 +7,9 @@
   let text = "";
   let action: QNotificationAction | undefined;
 
-  document.addEventListener("q-notification", (event) => {
-    text = (event as QNotification).text;
-    action = (event as QNotification).action;
+  addEventListener("notification", (event) => {
+    text = event.text;
+    action = event.action;
     notificationPresent = true;
 
     if (timeout) {

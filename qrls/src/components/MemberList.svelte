@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { QChangeEvent, QNotification } from "../assets/app";
+  import { QChange, QNotification, addEventListener } from "../assets/event";
   import {
     getMembers,
     signInMember,
@@ -9,35 +9,28 @@
   import Fuse from "fuse.js";
 
   let members: Memeber[];
+  let fuse: Fuse<Memeber>;
+  let filteredList: string[] = [];
+  let name = "";
 
   const updateMembers = async () => {
     const response = await getMembers();
     if (typeof response == "string") {
-      document.dispatchEvent(
-        new QNotification("Could not fetch members, tring again in 30 seconds")
-      );
+      new QNotification(
+        "Could not fetch members, tring again in 30 seconds"
+      ).dispatch();
       setTimeout(updateMembers, 30000);
     } else {
       members = response;
+      fuse = new Fuse(response, {
+        keys: ["name"],
+      });
     }
   };
 
   setInterval(updateMembers, 86400000);
 
   updateMembers();
-
-  let name = "";
-
-  let fuse: Fuse<Memeber>;
-
-  $: if (members) {
-    console.log("Setting new members");
-    fuse = new Fuse(members, {
-      keys: ["name"],
-    });
-  }
-
-  let filteredList: string[] = [];
 
   $: if (name != "" && fuse) {
     console.log("we gaming");
@@ -50,8 +43,8 @@
     filteredList = [];
   }
 
-  document.addEventListener("q-change", (event) => {
-    if ((event as QChangeEvent).name != "member") {
+  addEventListener("change", (event) => {
+    if (event.qName != "member") {
       name = "";
     }
   });
@@ -62,35 +55,28 @@
       const result = await signInMember(member.id);
 
       if (typeof result == "string") {
-        document.dispatchEvent(new QNotification(`Error signing in ${result}`));
+        new QNotification(`Error signing in ${result}`).dispatch();
         return;
       }
 
       const undoAction = async () => {
         const undoResult = await undoSignIn(result);
 
-        if (typeof undoResult == "string") {
-          document.dispatchEvent(
-            new QNotification(`Cound not undo sign in ${undoResult}`, {
+        (typeof undoResult == "string"
+          ? new QNotification(`Cound not undo sign in ${undoResult}`, {
               text: "Try again",
               action: undoAction,
             })
-          );
-        }
-
-        document.dispatchEvent(
-          new QNotification(`Successfully remove sign in for ${name}!`)
-        );
+          : new QNotification(`Successfully remove sign in for ${name}!`)
+        ).dispatch();
       };
 
-      document.dispatchEvent(
-        new QNotification(`${name} signed in as a member!`, {
-          action: undoAction,
-          text: "Undo",
-        })
-      );
+      new QNotification(`${name} signed in as a member!`, {
+        action: undoAction,
+        text: "Undo",
+      }).dispatch();
 
-      document.dispatchEvent(new QChangeEvent("main"));
+      new QChange("main").dispatch();
     }
   };
 </script>
@@ -101,15 +87,16 @@
   {#each filteredList as name}
     <button on:click={signIn(name)}>{name}</button>
   {/each}
-  {#if filteredList.length != 5 && name != ""}
-    <button
-      class="not-showing"
-      on:click={() => {
-        document.dispatchEvent(new QChangeEvent("guest"));
-      }}>Not showing?</button
-    >
-  {/if}
 </div>
+
+{#if filteredList.length != 5 && name != ""}
+  <button
+    class="not-showing"
+    on:click={() => {
+      new QChange("guest").dispatch();
+    }}>Not showing?</button
+  >
+{/if}
 
 <style lang="scss">
   input {
@@ -132,35 +119,34 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 100%;
+    width: 90%;
+    background-color: var(--bg-color);
+  }
 
-    button {
-      font-size: 18pt;
-      font-weight: bold;
-      border: 5px solid #252a31;
-      width: 90%;
-      height: 4rem;
+  button {
+    font-size: 18pt;
+    font-weight: bold;
+    height: 4rem;
+    color: var(--text-color-dark);
+    transition: all 0.1s ease-in-out;
+    border: none;
+    background: none;
+
+    &:hover {
       color: var(--text-color);
-      transition: all 0.1s ease-in-out;
-
-      &:nth-child(even) {
-        background-color: var(--bg-color);
-      }
-
-      &:nth-child(odd) {
-        background-color: var(--bg-color-light);
-      }
-
-      &:hover {
-        transform: scale(1.1, 1.1);
-      }
+      transform: scale(1.05, 1.05);
     }
+  }
 
-    .not-showing {
-      color: var(--text-color-dark);
-      text-transform: uppercase;
-      margin-top: 1rem;
-      border-bottom: 5px solid #252a31;
+  .not-showing {
+    color: var(--text-color);
+    background-color: var(--bg-color-red);
+    text-transform: uppercase;
+    width: 80%;
+    box-shadow: 0 5px 2px rgb(0 0 0 / 25%);
+
+    &:hover {
+      box-shadow: 5px 10px 6px rgb(0 0 0 / 25%);
     }
   }
 </style>

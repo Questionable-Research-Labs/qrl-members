@@ -1,37 +1,9 @@
 import { signInGuest, undoSignIn } from "./db";
-
-export type QNotificationAction = {
-  action: (() => Promise<void>) | (() => void);
-  text: string;
-};
-
-export class QNotification extends Event {
-  constructor(public text: string, public action?: QNotificationAction) {
-    super("q-notification", {
-      bubbles: false,
-      cancelable: false,
-      composed: false,
-    });
-  }
-}
-
-export class QChangeEvent extends Event {
-  public name: string;
-
-  constructor(name: string) {
-    super("q-change", {
-      bubbles: false,
-      cancelable: false,
-      composed: false,
-    });
-
-    this.name = name;
-  }
-}
+import { addEventListener, QChange, QNotification } from "./event";
 
 const qChangeClass = (element: Element, className: string, name: string) => {
-  document.addEventListener("q-change", (event) => {
-    if ((event as QChangeEvent).name == name) {
+  addEventListener("change", (event) => {
+    if (event.qName == name) {
       element.classList.add(className);
     } else {
       element.classList.remove(className);
@@ -45,7 +17,7 @@ const qGuestSubmit = (guestName: HTMLInputElement) => async (event: Event) => {
   const result = await signInGuest(name);
 
   if (typeof result == "string") {
-    document.dispatchEvent(new QNotification(`Error signing in ${result}`));
+    new QNotification(`Error signing in ${result}`).dispatch();
     return;
   }
 
@@ -53,27 +25,21 @@ const qGuestSubmit = (guestName: HTMLInputElement) => async (event: Event) => {
     const undoResult = await undoSignIn(result);
 
     if (typeof undoResult == "string") {
-      document.dispatchEvent(
-        new QNotification(`Cound not undo sign in ${undoResult}`, {
-          text: "Try again",
-          action: undoAction,
-        })
-      );
+      new QNotification(`Cound not undo sign in ${undoResult}`, {
+        text: "Try again",
+        action: undoAction,
+      }).dispatch();
     }
 
-    document.dispatchEvent(
-      new QNotification(`Successfully remove sign in for ${name}!`)
-    );
+    new QNotification(`Successfully remove sign in for ${name}!`).dispatch();
   };
 
-  document.dispatchEvent(
-    new QNotification(`${name} has signed in as a guest!`, {
-      action: undoAction,
-      text: "Undo",
-    })
-  );
+  new QNotification(`${name} has signed in as a guest!`, {
+    action: undoAction,
+    text: "Undo",
+  }).dispatch();
 
-  document.dispatchEvent(new QChangeEvent("main"));
+  new QChange("main").dispatch();
 };
 
 export const startApp = () => {
@@ -82,20 +48,12 @@ export const startApp = () => {
   });
 
   document.querySelectorAll("button[q-name]").forEach((elm) => {
-    const elmName = elm.getAttribute("q-name");
+    const elmName = elm.getAttribute("q-name") as string;
 
-    if (elmName) {
-      elm.addEventListener("click", () => {
-        document.dispatchEvent(new QChangeEvent(elmName));
-      });
-    }
+    elm.addEventListener("click", () => {
+      new QChange(elmName).dispatch();
+    });
   });
-
-  const qSlide = document.querySelector("*[q-slide]");
-
-  if (qSlide) {
-    qChangeClass(qSlide, "main", "main");
-  }
 
   const guestSubmitButton = document.querySelector(
     'button[q-submit="guest"]'
@@ -110,5 +68,5 @@ export const startApp = () => {
   guestSubmitButton.addEventListener("click", qGuestSubmit(guestName));
   guestSubmitForm.addEventListener("submit", qGuestSubmit(guestName));
 
-  document.dispatchEvent(new QChangeEvent("member"));
+  new QChange("main").dispatch();
 };
